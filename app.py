@@ -99,4 +99,9 @@ if suma_validada and st.button("Ejecutar Simulación"):
     ax.set_title('Distribución de los resultados de la simulación de Montecarlo')
     ax.set_xlabel('Número total de pacientes')
     ax.set_ylabel('Frecuencia de las simulaciones')
-    ax.axvline(media_pacientes, color='red', linestyle='dashed', linewidth=2, label=f'Media: {media_pacientes:.2f
+    
+    # La línea de código corregida se encuentra aquí
+    ax.axvline(media_pacientes, color='red', linestyle='dashed', linewidth=2, label=f'Media: {media_pacientes:.2f}')
+    ax.axvline(meta, color='green', linestyle='solid', linewidth=2, label=f'Meta: {meta}')
+    ax.legend()
+    st.pyplot(fig)
