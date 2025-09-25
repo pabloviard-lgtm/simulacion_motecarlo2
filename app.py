@@ -38,7 +38,16 @@ for i in range(int(num_centros_simulacion)):
     sum_pacientes += paciente_por_centro
 
 # --- Muestra la suma total de pacientes de forma destacada ---
-st.metric(label="**Suma total de pacientes ingresados**", value=sum_pacientes)
+st.markdown(
+    f"""
+    <div style="background-color:#f0f8ff; padding:15px; border-radius:10px; 
+                text-align:center; border: 2px solid #007acc; margin-top:20px;">
+        <h3 style="color:#007acc; margin:0;">🔹 Suma total de pacientes ingresados</h3>
+        <h2 style="color:#333; margin:5px 0 0 0;">{sum_pacientes}</h2>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # --- Lógica para calcular las probabilidades a partir de la entrada ---
 pacientes_posibles = []
@@ -99,7 +108,6 @@ if suma_validada and st.button("Ejecutar Simulación"):
     ax.set_xlabel('Número total de pacientes')
     ax.set_ylabel('Frecuencia de las simulaciones')
     
-    # La línea de código corregida se encuentra aquí
     ax.axvline(media_pacientes, color='red', linestyle='dashed', linewidth=2, label=f'Media: {media_pacientes:.2f}')
     ax.axvline(meta, color='green', linestyle='solid', linewidth=2, label=f'Meta: {meta}')
     ax.legend()
