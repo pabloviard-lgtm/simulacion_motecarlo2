@@ -38,7 +38,6 @@ for i in range(int(num_centros_simulacion)):
     sum_pacientes += paciente_por_centro
 
 # --- Muestra la suma total de pacientes de forma destacada ---
-# La etiqueta ahora está en negrita para resaltarla
 st.metric(label="**Suma total de pacientes ingresados**", value=sum_pacientes)
 
 # --- Lógica para calcular las probabilidades a partir de la entrada ---
