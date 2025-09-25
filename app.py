@@ -17,32 +17,43 @@ num_centros_simulacion = st.number_input("Ingrese el número de centros para la 
 meta = st.number_input("Ingrese la meta de pacientes total para el estudio:", min_value=0, value=100, step=1, help="Este es el número de pacientes que se espera alcanzar o superar.")
 
 st.markdown("---")
+# --- Cambio de etiqueta solicitado ---
 st.write("### Defina la distribución de probabilidad con sus datos")
-st.info("Ingrese la cantidad de pacientes que reclutó cada centro en un escenario de ejemplo, separados por comas. El sistema calculará las probabilidades automáticamente.")
+st.info("Ingrese la cantidad de pacientes que espera reclutar cada centro. El sistema calculará las probabilidades automáticamente.")
 
-# Usar st.text_input para ingresar la lista de pacientes de ejemplo
-pacientes_ejemplo_str = st.text_input("Pacientes por centro (ej: 8, 9, 10, 10, 11)", "8, 9, 10, 11, 12, 10, 10, 10, 10, 8")
+# --- Lógica para la entrada dinámica y la suma en tiempo real ---
+pacientes_ejemplo = []
+st.subheader("Ingrese los pacientes por cada centro:")
+sum_pacientes = 0
+for i in range(int(num_centros_simulacion)):
+    # st.number_input para cada centro con una clave única
+    paciente_por_centro = st.number_input(
+        f"Pacientes para el Centro {i + 1}:",
+        min_value=0,
+        value=10,
+        step=1,
+        key=f'paciente_{i}'
+    )
+    pacientes_ejemplo.append(paciente_por_centro)
+    sum_pacientes += paciente_por_centro
 
-# --- Lógica para calcular las probabilidades automáticamente ---
+# Muestra la suma total de pacientes en tiempo real
+st.markdown(f"**Suma total de pacientes ingresados:** `{sum_pacientes}`")
+
+# --- Lógica para calcular las probabilidades a partir de la entrada ---
 pacientes_posibles = []
 probabilidades_list = []
 suma_validada = False
 try:
-    pacientes_ejemplo = [int(p.strip()) for p in pacientes_ejemplo_str.split(',')]
-    if not pacientes_ejemplo:
-        st.warning("Por favor, ingrese al menos un número de paciente de ejemplo.")
+    if not pacientes_ejemplo or sum(pacientes_ejemplo) == 0:
+        st.warning("Por favor, ingrese un número de pacientes para cada centro.")
     else:
-        # Usar Counter para contar la frecuencia de cada número
         conteo_pacientes = Counter(pacientes_ejemplo)
         total_pacientes_ejemplo = len(pacientes_ejemplo)
         
-        # Ordenar los pacientes posibles de menor a mayor
         pacientes_posibles = sorted(conteo_pacientes.keys())
-        
-        # Calcular las probabilidades para cada paciente posible
         probabilidades_list = [conteo_pacientes[p] / total_pacientes_ejemplo for p in pacientes_posibles]
         
-        # Validar que la suma de probabilidades es 1.0
         if abs(sum(probabilidades_list) - 1.0) > 1e-6:
             st.error("Error en el cálculo de probabilidades. Revise sus datos.")
         else:
@@ -52,7 +63,7 @@ try:
             suma_validada = True
 
 except (ValueError, IndexError):
-    st.error("Error: Revise el formato de los datos ingresados. Deben ser números enteros separados por comas.")
+    st.error("Error: Revise el formato de los datos ingresados. Deben ser números enteros.")
 
 # --- Lógica de la simulación, solo se ejecuta si los datos son válidos y el botón es presionado ---
 if suma_validada and st.button("Ejecutar Simulación"):
@@ -64,7 +75,7 @@ if suma_validada and st.button("Ejecutar Simulación"):
     for _ in range(num_simulaciones):
         reclutamiento_por_centro = np.random.choice(
             a=pacientes_posibles, 
-            size=num_centros_simulacion, 
+            size=int(num_centros_simulacion), 
             p=probabilidades_list
         )
         total_pacientes_simulacion = sum(reclutamiento_por_centro)
