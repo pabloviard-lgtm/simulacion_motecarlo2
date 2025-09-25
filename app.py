@@ -37,8 +37,8 @@ for i in range(int(num_centros_simulacion)):
     pacientes_ejemplo.append(paciente_por_centro)
     sum_pacientes += paciente_por_centro
 
-# Muestra la suma total de pacientes en tiempo real
-st.markdown(f"**Suma total de pacientes ingresados:** `{sum_pacientes}`")
+# --- Muestra la suma total de pacientes de forma destacada ---
+st.metric(label="Suma total de pacientes ingresados", value=sum_pacientes)
 
 # --- Lógica para calcular las probabilidades a partir de la entrada ---
 pacientes_posibles = []
