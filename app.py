@@ -1,6 +1,6 @@
 import streamlit as st
 import numpy as np
-import np
+import matplotlib.pyplot as plt
 from collections import Counter
 
 # --- Título y descripción de la aplicación ---
@@ -37,9 +37,8 @@ for i in range(int(num_centros_simulacion)):
     pacientes_ejemplo.append(paciente_por_centro)
     sum_pacientes += paciente_por_centro
 
-# --- Muestra la suma total de pacientes de forma destacada con st.markdown ---
-st.markdown("### **Suma total de pacientes ingresados**")
-st.markdown(f"# **{sum_pacientes}**")
+# --- Muestra la suma total de pacientes de forma destacada ---
+st.metric(label="**Suma total de pacientes ingresados**", value=sum_pacientes)
 
 # --- Lógica para calcular las probabilidades a partir de la entrada ---
 pacientes_posibles = []
